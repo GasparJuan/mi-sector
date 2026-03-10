@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Mi Sector — Hospital Italiano La Plata</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: #f0f4f7;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: #2d2d2d;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 66px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .logo-nombre {
+      color: #fff;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .logo-ciudad {
+      color: rgba(255,255,255,0.65);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .header-badge {
+      background: #3a9c5e;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ── SUBHEADER ── */
+    .subheader {
+      background: #eaf4ef;
+      border-bottom: 1px solid #c5dece;
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #2d6e4e;
+      font-weight: 600;
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 22px 16px 48px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: #fff;
+      border: 1px solid #d5dde3;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: #f5f8fa;
+      border-bottom: 1px solid #d5dde3;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #3a9c5e;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #2d2d2d;
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    /* ── FECHA ── */
+    .date-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .date-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .date-num {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 50px;
+      font-weight: 700;
+      color: #2d2d2d;
+      line-height: 1;
+    }
+
+    .date-dia {
+      font-size: 14px;
+      font-weight: 700;
+      color: #3a9c5e;
+      text-transform: capitalize;
+    }
+
+    .date-full {
+      font-size: 12px;
+      color: #666;
+      margin-top: 2px;
+      text-transform: capitalize;
+    }
+
+    .btn-cambiar {
+      background: #fff;
+      border: 1.5px solid #3a9c5e;
+      color: #3a9c5e;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .btn-cambiar:hover {
+      background: #3a9c5e;
+      color: #fff;
+    }
+
+    .date-picker-wrap {
+      margin-top: 14px;
+      display: none;
+    }
+
+    .date-picker-wrap.open { display: block; }
+
+    .date-picker-wrap input[type="date"] {
+      width: 100%;
+      border: 1.5px solid #d5dde3;
+      color: #1a1a1a;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 15px;
+      padding: 10px 14px;
+      border-radius: 7px;
+      outline: none;
+      background: #f0f4f7;
+      transition: border-color 0.2s;
+    }
+
+    .date-picker-wrap input[type="date"]:focus {
+      border-color: #3a9c5e;
+    }
+
+    /* ── BUSCADOR ── */
+    .search-wrap { position: relative; }
+
+    .search-input {
+      width: 100%;
+      border: 1.5px solid #d5dde3;
+      background: #f0f4f7;
+      color: #1a1a1a;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 15px;
+      padding: 13px 110px 13px 16px;
+      border-radius: 7px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-input::placeholder { color: #aaa; }
+
+    .search-input:focus {
+      border-color: #3a9c5e;
+      box-shadow: 0 0 0 3px rgba(58,156,94,0.12);
+      background: #fff;
+    }
+
+    .btn-buscar {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #3a9c5e;
+      border: none;
+      color: #fff;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 9px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-buscar:hover { background: #2e8050; }
+    .btn-buscar:active { transform: translateY(-50%) scale(0.97); }
+
+    /* ── RESULTADO ── */
+    .result-area { min-height: 10px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-card {
+      background: #fff;
+      border: 1px solid #d5dde3;
+      border-top: 4px solid #3a9c5e;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      overflow: hidden;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .result-name-bar {
+      background: #eaf4ef;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #c5dece;
+    }
+
+    .result-name-bar svg {
+      width: 16px; height: 16px;
+      color: #3a9c5e;
+      flex-shrink: 0;
+    }
+
+    .result-name-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: #2d6e4e;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .result-body { padding: 20px 18px; }
+
+    .result-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+
+    .result-sector {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: #2d2d2d;
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+
+    .result-franco {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #eaf4ef;
+      border: 1px solid #c5dece;
+      border-radius: 6px;
+      padding: 9px 13px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: #2d6e4e;
+    }
+
+    .result-franco svg {
+      width: 14px; height: 14px;
+      flex-shrink: 0;
+    }
+
+    .result-notes {
+      background: #fffbec;
+      border-left: 3px solid #e8a800;
+      border-radius: 0 6px 6px 0;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #5a4200;
+      line-height: 1.5;
+    }
+
+    /* ── MENSAJES ── */
+    .msg-card {
+      background: #fff;
+      border: 1px solid #d5dde3;
+      border-radius: 10px;
+      padding: 20px 18px;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .msg-card.error   { border-left: 4px solid #e85a3a; }
+    .msg-card.warning { border-left: 4px solid #e8a800; }
+
+    .msg-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .msg-card.error   .msg-title { color: #c0392b; }
+    .msg-card.warning .msg-title { color: #8a6000; }
+
+    .msg-sub {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .loading-card {
+      background: #fff;
+      border: 1px solid #d5dde3;
+      border-radius: 10px;
+      padding: 28px;
+      text-align: center;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .spinner {
+      width: 30px; height: 30px;
+      border: 3px solid #e0e0e0;
+      border-top-color: #3a9c5e;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text { font-size: 13px; color: #888; }
+
+    /* ── BOTÓN FORMULARIO ── */
+    .btn-formulario {
+      display: block;
+      margin-top: 20px;
+      padding: 15px 20px;
+      background: #fff;
+      border: 2px solid #3a9c5e;
+      border-radius: 10px;
+      color: #2d6e4e;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+      box-shadow: 0 2px 8px rgba(58,156,94,0.1);
+      transition: all 0.2s;
+    }
+
+    .btn-formulario:hover {
+      background: #3a9c5e;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(58,156,94,0.25);
+      transform: translateY(-1px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #2d2d2d;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      font-size: 11px;
+      padding: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    footer strong { color: rgba(255,255,255,0.8); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-logo">
+      <!-- Logo SVG Italiano La Plata -->
+      <svg width="42" height="42" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 50 Q30 38 28 18 Q42 16 50 50Z" fill="#e8614a"/>
+        <path d="M50 50 Q62 28 80 26 Q82 40 50 50Z" fill="#7dba8a"/>
+        <path d="M50 50 Q18 60 20 80 Q36 82 50 50Z" fill="#3a9c5e"/>
+        <path d="M50 50 Q72 64 74 82 Q58 84 50 50Z" fill="#c94535"/>
+      </svg>
+      <div class="logo-text">
+        <span class="logo-nombre">Italiano</span>
+        <span class="logo-ciudad">La Plata</span>
+      </div>
+    </div>
+    <div class="header-badge">Mi Sector</div>
+  </header>
+
+  <div class="subheader">
+    <span>📋</span>
+    <span>Consultá tu sector de trabajo del día</span>
+  </div>
+
+  <main>
+
+    <!-- Fecha -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot"></div>
+        <div class="card-title">Fecha consultada</div>
+      </div>
+      <div class="card-body">
+        <div class="date-row" onclick="toggleDatePicker()">
+          <div class="date-left">
+            <div class="date-num" id="dateDayDisplay">—</div>
+            <div>
+              <div class="date-dia" id="dateDiaDisplay">—</div>
+              <div class="date-full" id="dateFullDisplay">—</div>
+            </div>
+          </div>
+          <button class="btn-cambiar">Cambiar</button>
+        </div>
+        <div class="date-picker-wrap" id="datePickerWrap">
+          <input type="date" id="datePickerInput" onchange="onDateChange()" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Buscador -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot"></div>
+        <div class="card-title">Buscar por nombre</div>
+      </div>
+      <div class="card-body">
+        <div class="search-wrap">
+          <input
+            class="search-input"
+            id="nameInput"
+            type="text"
+            placeholder="Ingresá tu apellido o nombre..."
+            onkeydown="if(event.key==='Enter') buscar()"
+            autocomplete="off"
+            autocorrect="off"
+          />
+          <button class="btn-buscar" onclick="buscar()">Buscar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resultado -->
+    <div class="result-area" id="resultArea"></div>
+
+    <!-- Botón formulario -->
+    <a href="https://forms.gle/EuhfXFsTWK6K3JHx5" target="_blank" class="btn-formulario">
+      📝 Cambio de Franco o Compensación
+    </a>
+
+  </main>
+
+  <footer>
+    <strong>Hospital Italiano de La Plata</strong> &nbsp;·&nbsp; Sistema interno de consulta de sectores
+  </footer>
+
+  <script>
+    const SHEET_ID = '1L8eyFwLA1EGOXnm9q2uDI-L_NA8OAneOQsNQACVY6AU';
+    let currentDate = new Date();
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function init() {
+      updateDateDisplay(currentDate);
+    }
+
+    function updateDateDisplay(date) {
+      document.getElementById('dateDayDisplay').textContent = pad(date.getDate());
+      document.getElementById('dateDiaDisplay').textContent =
+        date.toLocaleDateString('es-AR', { weekday: 'long' });
+      document.getElementById('dateFullDisplay').textContent =
+        date.toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('datePickerInput').value =
+        `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
+    }
+
+    function toggleDatePicker() {
+      document.getElementById('datePickerWrap').classList.toggle('open');
+    }
+
+    function onDateChange() {
+      const val = document.getElementById('datePickerInput').value;
+      if (!val) return;
+      const [y, m, d] = val.split('-').map(Number);
+      currentDate = new Date(y, m - 1, d);
+      updateDateDisplay(currentDate);
+      document.getElementById('datePickerWrap').classList.remove('open');
+      if (document.getElementById('nameInput').value.trim()) buscar();
+    }
+
+    function cellText(cell) {
+      if (!cell) return '';
+      return String(cell.f ?? cell.v ?? '').trim();
+    }
+
+    async function fetchSheet(sheetName) {
+      const range = encodeURIComponent(`${sheetName}!A3:E`);
+      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&range=${range}`;
+      const res = await fetch(url);
+      const text = await res.text();
+      const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)?.[1];
+      if (!jsonStr) return [];
+      const data = JSON.parse(jsonStr);
+      return data?.table?.rows || [];
+    }
+
+    async function buscar() {
+      const name = document.getElementById('nameInput').value.trim();
+      const resultArea = document.getElementById('resultArea');
+
+      if (!name) {
+        resultArea.innerHTML = `
+          <div class="msg-card warning">
+            <div class="msg-title">Ingresá tu nombre</div>
+            <div class="msg-sub">Escribí tu apellido o nombre en el campo de búsqueda.</div>
+          </div>`;
+        return;
+      }
+
+      resultArea.innerHTML = `
+        <div class="loading-card">
+          <div class="spinner"></div>
+          <div class="loading-text">Consultando planilla...</div>
+        </div>`;
+
+      try {
+        const dayNum = currentDate.getDate();
+        let rows = await fetchSheet(pad(dayNum));
+        if (!rows || rows.length === 0) rows = await fetchSheet(String(dayNum));
+
+        if (!rows || rows.length === 0) {
+          resultArea.innerHTML = `
+            <div class="msg-card warning">
+              <div class="msg-title">Sin datos para este día</div>
+              <div class="msg-sub">No se encontró la hoja <strong>${pad(dayNum)}</strong> en la planilla o no tiene datos cargados.</div>
+            </div>`;
+          return;
+        }
+
+        const normalize = s =>
+          (s || '').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const nameLower = normalize(name);
+
+        let lastSector = '—';
+        let found = null;
+        for (const row of rows) {
+          const sec = cellText(row.c?.[0]);
+          if (sec) lastSector = sec;
+          const cellB = cellText(row.c?.[1]);
+          if (cellB && normalize(cellB).includes(nameLower)) {
+            found = {
+              sector:   lastSector,
+              franco:   cellText(row.c?.[2]) || '',
+              notes:    cellText(row.c?.[4]) || '',
+              fullName: cellB
+            };
+            break;
+          }
+        }
+
+        if (!found) {
+          resultArea.innerHTML = `
+            <div class="msg-card error">
+              <div class="msg-title">No encontrado</div>
+              <div class="msg-sub">
+                No se encontró "<strong>${esc(name)}</strong>" en la planilla del día <strong>${pad(dayNum)}</strong>.<br>
+                Verificá que el nombre esté escrito correctamente.
+              </div>
+            </div>`;
+          return;
+        }
+
+        const francoHTML = found.franco ? `
+          <div class="result-franco">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            Franco: <strong>${esc(found.franco)}</strong>
+          </div>` : '';
+
+        const notesHTML = found.notes ? `
+          <div class="result-label" style="margin-top:4px;">Notas</div>
+          <div class="result-notes">${esc(found.notes)}</div>` : '';
+
+        resultArea.innerHTML = `
+          <div class="result-card">
+            <div class="result-name-bar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+              </svg>
+              <div class="result-name-text">${esc(found.fullName)}</div>
+            </div>
+            <div class="result-body">
+              <div class="result-label">Sector asignado</div>
+              <div class="result-sector">${esc(found.sector)}</div>
+              ${francoHTML}
+              ${notesHTML}
+            </div>
+          </div>`;
+
+      } catch (err) {
+        resultArea.innerHTML = `
+          <div class="msg-card error">
+            <div class="msg-title">Error de conexión</div>
+            <div class="msg-sub">
+              No se pudo conectar con la planilla. Verificá que el Google Sheets sea público.<br><br>
+              <small style="color:#999">${err.message}</small>
+            </div>
+          </div>`;
+      }
+    }
+
+    function esc(str) {
+      return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    init();
+  </script>
+</body>
+</html>
